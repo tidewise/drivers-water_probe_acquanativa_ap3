@@ -3,7 +3,7 @@
 
 #include <base/Float.hpp>
 #include <modbus/Master.hpp>
-#include <water_probe_acquanativa_ap3/ProbeMeasures.hpp>
+#include <water_probe_acquanativa_ap3/ProbeMeasurements.hpp>
 
 namespace water_probe_acquanativa_ap3 {
     /**
@@ -52,7 +52,7 @@ namespace water_probe_acquanativa_ap3 {
          */
         void disable();
 
-        ProbeMeasures getMeasures();
+        ProbeMeasurements getMeasurements();
 
 
     };

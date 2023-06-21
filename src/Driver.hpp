@@ -18,12 +18,12 @@ namespace water_probe_acquanativa_ap3 {
             R_DISSOLVED_OXIGEN_SAT          = 2,
             R_TEMPERATURE                   = 3,
             R_PH                            = 4,
-            R_OXIDATION_REDUCTION_POTENCIAL = 5,
-            R_CONDUCTIVITY                  = 6,
-            R_SALINITY                      = 7,
-            R_DISSOLVED_SOLIDS              = 8,
-            R_TURBITY                       = 9,
-            R_CHLOROPHYLL                   = 10,
+            R_CONDUCTIVITY                  = 5,
+            R_SALINITY                      = 6,
+            R_DISSOLVED_SOLIDS              = 7,
+            R_SPECIFIC_GRAVITY              = 8,
+            R_OXIDATION_REDUCTION_POTENCIAL = 9,
+            R_TURBITY = 10,
 
             R_CONFIG_SAVE                   = 30
         };

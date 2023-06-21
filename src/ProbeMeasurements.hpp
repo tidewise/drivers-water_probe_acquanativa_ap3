@@ -20,9 +20,6 @@ namespace water_probe_acquanativa_ap3 {
         /** Water pH */
         float ph = base::unknown<float>();
 
-        /** Water oxidation reduction potencial in mV */
-        float oxidation_reduction_potencial = base::unknown<float>();
-
         /** Water conductivity in uS/cm*/
         float conductivity = base::unknown<float>();
 
@@ -32,11 +29,14 @@ namespace water_probe_acquanativa_ap3 {
         /** Water dissolved solids concentration in ppm */
         float dissolved_solids = base::unknown<float>();
 
+        /** Water oxidation reduction potencial in mV */
+        float specific_gravity = base::unknown<float>();
+
+        /** Water oxidation reduction potencial in mV */
+        float oxidation_reduction_potencial = base::unknown<float>();
+
         /** Water turbity in NTU */
         float turbity = base::unknown<float>();
-
-        /** Water chlorophyll in ug/L */
-        float chlorophyll = base::unknown<float>();
     };
 }
 

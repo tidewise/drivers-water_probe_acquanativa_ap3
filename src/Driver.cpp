@@ -30,13 +30,13 @@ ProbeMeasurements Driver::getMeasurements () {
     measurements.dissolved_oxygen_mgL = readSingleRegister<float>(R_DISSOLVED_OXIGEN_MG_L) / 100 * 1000;
     measurements.dissolved_oxygen_sat = readSingleRegister<float>(R_DISSOLVED_OXIGEN_SAT) / 100;
     measurements.temperature = base::Temperature::fromCelsius(readSingleRegister<float>(R_TEMPERATURE) / 100);
-    measurements.ph = readSingleRegister<float>(R_PH);
-    measurements.oxidation_reduction_potencial = readSingleRegister<float>(R_OXIDATION_REDUCTION_POTENCIAL) * (10^6);
-    measurements.conductivity = readSingleRegister<float>(R_CONDUCTIVITY) * (10^6);
-    measurements.salinity = readSingleRegister<float>(R_SALINITY);
-    measurements.dissolved_solids = readSingleRegister<float>(R_DISSOLVED_SOLIDS);
+    measurements.ph = readSingleRegister<float>(R_PH) / 100;
+    measurements.conductivity = readSingleRegister<float>(R_CONDUCTIVITY) / 100 * (10^6);
+    measurements.salinity = readSingleRegister<float>(R_SALINITY) / 100;
+    measurements.dissolved_solids = readSingleRegister<float>(R_DISSOLVED_SOLIDS) / 100;
+    measurements.specific_gravity = readSingleRegister<float>(R_SPECIFIC_GRAVITY) / 100;
+    measurements.oxidation_reduction_potencial = readSingleRegister<float>(R_OXIDATION_REDUCTION_POTENCIAL) / 100 * (10^6);
     measurements.turbity = readSingleRegister<float>(R_TURBITY);
-    measurements.chlorophyll = readSingleRegister<float>(R_CHLOROPHYLL) * (10^9);
 
     return measurements;
 }

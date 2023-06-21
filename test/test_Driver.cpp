@@ -1,5 +1,5 @@
 #include <boost/test/unit_test.hpp>
-#include <water_probe_acquanativa_ap3/Dummy.hpp>
+#include <water_probe_acquanativa_ap3/Driver.hpp>
 
 using namespace water_probe_acquanativa_ap3;
 

@@ -1,10 +1,17 @@
-#include <boost/test/unit_test.hpp>
+#include <gtest/gtest.h>
+#include <iodrivers_base/FixtureGTest.hpp>
 #include <water_probe_acquanativa_ap3/Driver.hpp>
 
 using namespace water_probe_acquanativa_ap3;
 
-BOOST_AUTO_TEST_CASE(it_should_not_crash_when_welcome_is_called)
-{
-    water_probe_acquanativa_ap3::DummyClass dummy;
-    dummy.welcome();
+struct test_Driver { test_Driver() };
+
+TEST_F(test_Driver, it_reads_probe_parameters) {
+    IODRIVERS_BASE_MOCK();
+
+    driver.getMeasurements();
+
+    ProbeMeasurements measurements;
+    measurements.temperature = 12;
+    measurements.salinity = 30;
 }

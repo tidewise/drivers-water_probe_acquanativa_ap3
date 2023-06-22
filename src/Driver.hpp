@@ -13,7 +13,6 @@ namespace water_probe_acquanativa_ap3 {
         int m_address;
 
         enum Registers {
-            R_CONFIGURATION                 = 0,
             R_DISSOLVED_OXIGEN_MG_L         = 1,
             R_DISSOLVED_OXIGEN_SAT          = 2,
             R_TEMPERATURE                   = 3,
@@ -23,38 +22,16 @@ namespace water_probe_acquanativa_ap3 {
             R_DISSOLVED_SOLIDS              = 7,
             R_SPECIFIC_GRAVITY              = 8,
             R_OXIDATION_REDUCTION_POTENCIAL = 9,
-            R_TURBITY = 10,
-
-            R_CONFIG_SAVE                   = 30
+            R_TURBITY = 10
         };
 
         template<typename T>
         T readSingleRegister(int register_id);
 
-        template<typename T>
-        void writeSingleRegister(int register_id, T value);
-
     public:
         Driver(int address);
 
-        /** Prepare the unit to receive control from the driver without enabling power */
-        void prepare();
-
-        /** Save the current configuration*/
-        void saveConfiguration();
-
-        /** Enable the sensor control and give control to the serial interface */
-        void enable();
-
-        /**
-         * Disable the sensor control and give control away from to the serial
-         * interface
-         */
-        void disable();
-
         ProbeMeasurements getMeasurements();
-
-
     };
 
 }

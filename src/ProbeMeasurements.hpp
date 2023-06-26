@@ -3,16 +3,17 @@
 
 #include <base/Float.hpp>
 #include <base/Temperature.hpp>
+#include <base/Time.hpp>
 
 namespace water_probe_acquanativa_ap3 {
     struct ProbeMeasurements {
         base::Time time;
         
         /** Water dissolved oxygen concentration in Kg/L */
-        float dissolved_oxygen_mgL = base::unknown<float>();
+        float concentration = base::unknown<float>();
 
         /** Water dissolved oxygen % saturation */
-        float dissolved_oxygen_sat = base::unknown<float>();
+        float saturation = base::unknown<float>();
 
         /** Water temperature in K */
         base::Temperature temperature;
@@ -37,6 +38,15 @@ namespace water_probe_acquanativa_ap3 {
 
         /** Water turbity in NTU */
         float turbity = base::unknown<float>();
+
+        /** Sensor height in m */
+        float height = base::unknown<float>();
+
+        /** Sensor latitude */
+        float latitude = base::unknown<float>();
+
+        /** Sensor longitude */
+        float longitude = base::unknown<float>();
     };
 }
 

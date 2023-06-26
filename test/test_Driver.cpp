@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <iodrivers_base/FixtureGTest.hpp>
+#include <test_Driver.hpp>
 #include <water_probe_acquanativa_ap3/Driver.hpp>
 
 using namespace water_probe_acquanativa_ap3;
@@ -15,3 +16,4 @@ TEST_F(test_Driver, it_reads_probe_parameters) {
     measurements.temperature = 12;
     measurements.salinity = 30;
 }
+

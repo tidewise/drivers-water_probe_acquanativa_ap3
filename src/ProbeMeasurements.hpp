@@ -34,7 +34,7 @@ namespace water_probe_acquanativa_ap3 {
         float specific_gravity = base::unknown<float>();
 
         /** Water oxidation reduction potencial in V */
-        float oxidation_reduction_potencial = base::unknown<float>();
+        float ORP = base::unknown<float>();
 
         /** Water turbity in NTU */
         float turbity = base::unknown<float>();

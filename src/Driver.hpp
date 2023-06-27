@@ -10,6 +10,7 @@ namespace water_probe_acquanativa_ap3 {
      * Driver for the Acquanativa Acqua Probe AP3 sensor
      */
     class Driver : public modbus::Master {
+        // the default address has to be 57
         int m_address;
 
         enum Registers {
@@ -21,7 +22,7 @@ namespace water_probe_acquanativa_ap3 {
             R_SALINITY                      = 5,
             R_DISSOLVED_SOLIDS              = 6,
             R_SPECIFIC_GRAVITY              = 7,
-            R_OXIDATION_REDUCTION_POTENCIAL = 8,
+            R_ORP = 8,
             R_TURBITY                       = 9,
             R_HEIGHT                        = 10,
             R_LATITUDE                      = 11,

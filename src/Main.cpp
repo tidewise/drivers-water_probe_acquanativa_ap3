@@ -22,7 +22,7 @@ int main(int argc, char** argv)
               << "Salinity: " << measurings.salinity << " ppt\n"
               << "Dissolved solids: " << measurings.dissolved_solids << " ppm\n"
               << "Specific gravity: " << measurings.specific_gravity << "\n"
-              << "ORP: " << measurings.oxidation_reduction_potencial << " V\n"
+              << "ORP: " << measurings.ORP << " V\n"
               << "Turbity: " << measurings.turbity << " NTU\n"
               << "Height: " << measurings.height << " m\n"
               << "Latitude: " << measurings.latitude << " °\n"

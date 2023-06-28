@@ -22,7 +22,7 @@ struct DriverTest : public testing::Test,
 };
 
 
-TEST_F(DriverTest, it_reads_probe_parameters) {
+TEST_F(DriverTest, it_reads_and_converts_probe_parameters) {
     IODRIVERS_BASE_MOCK();
 
     EXPECT_MODBUS_READ(57, false, 0, { 756 });
@@ -40,7 +40,6 @@ TEST_F(DriverTest, it_reads_probe_parameters) {
     EXPECT_MODBUS_READ(57, false, 12, { 76 });
 
     auto measurements = driver.getMeasurements();
-    // auto f_temperature = measurements.temperature;
 
     ASSERT_FLOAT_EQ(756 * std::pow(10, -5), measurements.concentration);
     ASSERT_FLOAT_EQ(85 * std::pow(10, -2), measurements.saturation);

@@ -9,35 +9,35 @@ namespace water_probe_acquanativa_ap3 {
     struct ProbeMeasurements {
         base::Time time;
         
-        /** Water dissolved oxygen concentration in Kg/L */
-        float concentration = base::unknown<float>();
+        /** Water dissolved oxygen concentration in Kg/m³ */
+        float oxygen_concentration = base::unknown<float>();
 
-        /** Water dissolved oxygen % saturation */
-        float saturation = base::unknown<float>();
+        /** Water dissolved oxygen % saturation e.g. 0.1 = 10% */
+        float oxygen_saturation = base::unknown<float>();
 
         /** Water temperature in K */
         base::Temperature temperature;
 
         /** Water pH */
-        float ph = base::unknown<float>();
+        float pH = base::unknown<float>();
 
-        /** Water conductivity in S/cm*/
+        /** Water conductivity in S/m*/
         float conductivity = base::unknown<float>();
 
         /** Water salinity in PSU */
         float salinity = base::unknown<float>();
 
-        /** Water dissolved solids concentration in ppm */
+        /** Water dissolved solids concentration */
         float dissolved_solids = base::unknown<float>();
 
-        /** Water oxidation reduction potencial in V */
+        /** Water specific gravity */
         float specific_gravity = base::unknown<float>();
 
-        /** Water oxidation reduction potencial in V */
-        float ORP = base::unknown<float>();
+        /** Oxidation reduction potential in V */
+        float oxidation_reduction_potential = base::unknown<float>();
 
-        /** Water turbity in NTU */
-        float turbity = base::unknown<float>();
+        /** Water turbidity in NTU */
+        float turbidity = base::unknown<float>();
 
         /** Sensor height in m */
         float height = base::unknown<float>();

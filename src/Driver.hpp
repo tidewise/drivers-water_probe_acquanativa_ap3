@@ -30,8 +30,10 @@ namespace water_probe_acquanativa_ap3 {
 
         };
 
-        template<typename T>
-        T readSingleRegister(int register_id);
+        // template<typename T>
+        // T readSingleRegister(int register_id);
+
+        int16_t readSingleRegister(int register_id);
 
     public:
         Driver(int address);

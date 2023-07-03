@@ -23,9 +23,9 @@ ProbeMeasurements Driver::getMeasurements()
 
     measurements.time = base::Time::now();
     measurements.oxygen_concentration =
-        readSingleRegister(R_DISSOLVED_OXIGEN_MG_L) / std::pow<float>(10, 8);
+        readSingleRegister(R_OXYGEN_CONCENTRATION) / std::pow<float>(10, 8);
     measurements.oxygen_saturation =
-        readSingleRegister(R_DISSOLVED_OXIGEN_SAT) / std::pow<float>(10, 4);
+        readSingleRegister(R_OXYGEN_SATURATION) / std::pow<float>(10, 4);
     measurements.temperature =
         base::Temperature::fromCelsius(readSingleRegister(R_TEMPERATURE) / 100);
     measurements.pH = readSingleRegister(R_PH) / 100.0;
@@ -35,8 +35,8 @@ ProbeMeasurements Driver::getMeasurements()
     measurements.dissolved_solids = readSingleRegister(R_DISSOLVED_SOLIDS) / std::pow<float>(10, 8);
     measurements.specific_gravity = readSingleRegister(R_SPECIFIC_GRAVITY) / 100.0;
     measurements.oxidation_reduction_potential =
-        readSingleRegister(R_ORP) / std::pow<float>(10, 3);
-    measurements.turbidity = readSingleRegister(R_TURBITY);
+        readSingleRegister(R_OXIDATION_REDUCTION_POTENTIAL) / std::pow<float>(10, 3);
+    measurements.turbidity = readSingleRegister(R_TURBIDITY);
     measurements.height = readSingleRegister(R_HEIGHT);
     measurements.latitude = readSingleRegister(R_LATITUDE) / 100.0;
     measurements.longitude = readSingleRegister(R_LONGITUDE) / 100.0;

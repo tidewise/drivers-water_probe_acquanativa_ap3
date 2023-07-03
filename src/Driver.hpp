@@ -14,16 +14,16 @@ namespace water_probe_acquanativa_ap3 {
         int m_address;
 
         enum Registers {
-            R_DISSOLVED_OXIGEN_MG_L         = 0,
-            R_DISSOLVED_OXIGEN_SAT          = 1,
+            R_OXYGEN_CONCENTRATION          = 0,
+            R_OXYGEN_SATURATION             = 1,
             R_TEMPERATURE                   = 2,
             R_PH                            = 3,
             R_CONDUCTIVITY                  = 4,
             R_SALINITY                      = 5,
             R_DISSOLVED_SOLIDS              = 6,
             R_SPECIFIC_GRAVITY              = 7,
-            R_ORP = 8,
-            R_TURBITY                       = 9,
+            R_OXIDATION_REDUCTION_POTENTIAL = 8,
+            R_TURBIDITY                     = 9,
             R_HEIGHT                        = 10,
             R_LATITUDE                      = 11,
             R_LONGITUDE                     = 12

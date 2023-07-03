@@ -20,10 +20,10 @@ int main(int argc, char** argv)
               << "pH: " << measurings.pH << "\n"
               << "Conductivity: " << measurings.conductivity << " S/m\n"
               << "Salinity: " << measurings.salinity << " ppt\n"
-              << "Dissolved solids: " << measurings.dissolved_solids << " ppm\n"
+              << "Dissolved solids: " << measurings.dissolved_solids << " \n"
               << "Specific gravity: " << measurings.specific_gravity << "\n"
               << "ORP: " << measurings.oxidation_reduction_potential << " V\n"
-              << "Turbity: " << measurings.turbidity << " NTU\n"
+              << "Turbidity: " << measurings.turbidity << " NTU\n"
               << "Height: " << measurings.height << " m\n"
               << "Latitude: " << measurings.latitude << " °\n"
               << "Longitude: " << measurings.longitude << " °\n";

@@ -43,8 +43,6 @@ TEST_F(DriverTest, it_reads_and_converts_probe_parameters)
     EXPECT_MODBUS_READ(57, false, 12, {76});
 
     auto measurements = driver.getMeasurements();
-    // float a = 756 * std::pow(10, -8);
-    // auto b = measurements.oxygen_concentration;
 
     ASSERT_FLOAT_EQ(756 * std::pow(10, -8), measurements.oxygen_concentration);
     ASSERT_FLOAT_EQ(85 * std::pow(10, -4), measurements.oxygen_saturation);

@@ -11,7 +11,7 @@ Driver::Driver(int address)
     // setInterframeDelay(base::Time::fromMicroseconds(3500));
 }
 
-int16_t Driver::readSingleRegister(int register_id)
+int16_t Driver::readSingleRegister(unsigned int register_id)
 {
     int16_t value = modbus::Master::readSingleRegister(m_address, false, register_id);
     return value;

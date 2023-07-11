@@ -24,7 +24,7 @@ namespace water_probe_acquanativa_ap3 {
         /** Water conductivity in S/m*/
         float conductivity = base::unknown<float>();
 
-        /** Water salinity in PSU */
+        /** Water salinity in Practical Salinity Unit (PSU) */
         float salinity = base::unknown<float>();
 
         /** Water dissolved solids concentration */
@@ -36,7 +36,7 @@ namespace water_probe_acquanativa_ap3 {
         /** Oxidation reduction potential in V */
         float oxidation_reduction_potential = base::unknown<float>();
 
-        /** Water turbidity in NTU */
+        /** Water turbidity in Nephelometric Turbidity Unit (NTU)*/
         float turbidity = base::unknown<float>();
 
         /** Sensor height in m */

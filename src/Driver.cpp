@@ -5,11 +5,7 @@
 using namespace water_probe_acquanativa_ap3;
 
 Driver::Driver(int address)
-    : m_address(address)
-{
-    // baud rate default is 9600
-    // setInterframeDelay(base::Time::fromMicroseconds(3500));
-}
+    : m_address(address) {}
 
 int16_t Driver::readSingleRegister(unsigned int register_id)
 {

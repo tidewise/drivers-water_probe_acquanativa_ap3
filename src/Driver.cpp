@@ -19,14 +19,14 @@ ProbeMeasurements Driver::getMeasurements()
 
     measurements.time = base::Time::now();
     measurements.oxygen_concentration =
-        readSingleRegister(R_OXYGEN_CONCENTRATION) / std::pow<float>(10, 8);
+        readSingleRegister(R_OXYGEN_CONCENTRATION) / std::pow<float>(10, 5);
     measurements.oxygen_saturation =
         readSingleRegister(R_OXYGEN_SATURATION) / std::pow<float>(10, 4);
     measurements.temperature =
         base::Temperature::fromCelsius(readSingleRegister(R_TEMPERATURE) / 100);
     measurements.pH = readSingleRegister(R_PH) / 100.0;
     measurements.conductivity =
-        readSingleRegister(R_CONDUCTIVITY) / std::pow<float>(10, 10);
+        readSingleRegister(R_CONDUCTIVITY) / std::pow<float>(10, 6);
     measurements.salinity = readSingleRegister(R_SALINITY) / 100.0;
     measurements.dissolved_solids = readSingleRegister(R_DISSOLVED_SOLIDS) / std::pow<float>(10, 8);
     measurements.specific_gravity = readSingleRegister(R_SPECIFIC_GRAVITY) / 100.0;

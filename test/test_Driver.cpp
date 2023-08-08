@@ -44,11 +44,11 @@ TEST_F(DriverTest, it_reads_and_converts_probe_parameters)
 
     auto measurements = driver.getMeasurements();
 
-    ASSERT_FLOAT_EQ(756 * std::pow(10, -8), measurements.oxygen_concentration);
+    ASSERT_FLOAT_EQ(756 * std::pow(10, -5), measurements.oxygen_concentration);
     ASSERT_FLOAT_EQ(85 * std::pow(10, -4), measurements.oxygen_saturation);
     ASSERT_FLOAT_EQ(275.15, measurements.temperature.getKelvin());
     ASSERT_FLOAT_EQ(646 * std::pow(10, -2), measurements.pH);
-    ASSERT_FLOAT_EQ(156 * std::pow(10, -10), measurements.conductivity);
+    ASSERT_FLOAT_EQ(156 * std::pow(10, -6), measurements.conductivity);
     ASSERT_FLOAT_EQ(126 * std::pow(10, -2), measurements.salinity);
     ASSERT_FLOAT_EQ(1256 * std::pow(10, -8), measurements.dissolved_solids);
     ASSERT_FLOAT_EQ(32 * std::pow(10, -2), measurements.specific_gravity);

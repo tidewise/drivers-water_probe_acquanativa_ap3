@@ -5,7 +5,9 @@
 using namespace water_probe_acquanativa_ap3;
 
 Driver::Driver(int address)
-    : m_address(address) {}
+    : m_address(address)
+{
+}
 
 uint16_t Driver::readSingleRegister(unsigned int register_id)
 {

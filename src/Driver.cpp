@@ -19,19 +19,17 @@ ProbeMeasurements Driver::getMeasurements()
 
     measurements.time = base::Time::now();
     measurements.oxygen_concentration =
-        readSingleRegister(R_OXYGEN_CONCENTRATION) / std::pow<float>(10, 8);
-    measurements.oxygen_saturation =
-        readSingleRegister(R_OXYGEN_SATURATION) / std::pow<float>(10, 4);
+        readSingleRegister(R_OXYGEN_CONCENTRATION) / 100.0 * 1e-6 / 1e-3;
+    measurements.oxygen_saturation = readSingleRegister(R_OXYGEN_SATURATION) * 1e-4;
     measurements.temperature =
-        base::Temperature::fromCelsius(readSingleRegister(R_TEMPERATURE) / 100);
+        base::Temperature::fromCelsius(readSingleRegister(R_TEMPERATURE) / 100.0);
     measurements.pH = readSingleRegister(R_PH) / 100.0;
-    measurements.conductivity =
-        readSingleRegister(R_CONDUCTIVITY) / std::pow<float>(10, 10);
-    measurements.salinity = readSingleRegister(R_SALINITY) / 100.0;
-    measurements.dissolved_solids = readSingleRegister(R_DISSOLVED_SOLIDS) / std::pow<float>(10, 8);
+    measurements.conductivity = readSingleRegister(R_CONDUCTIVITY) / 100.0 * 1e-6 / 1e-2;
+    measurements.salinity = readSingleRegister(R_SALINITY) / 100.0 * 1e-3;
+    measurements.dissolved_solids = readSingleRegister(R_DISSOLVED_SOLIDS) / 100.0 * 1e-6;
     measurements.specific_gravity = readSingleRegister(R_SPECIFIC_GRAVITY) / 100.0;
     measurements.oxidation_reduction_potential =
-        readSingleRegister(R_OXIDATION_REDUCTION_POTENTIAL) / std::pow<float>(10, 3);
+        readSingleRegister(R_OXIDATION_REDUCTION_POTENTIAL) * 1e-3;
     measurements.turbidity = readSingleRegister(R_TURBIDITY);
     measurements.height = readSingleRegister(R_HEIGHT);
     measurements.latitude = readSingleRegister(R_LATITUDE) / 100.0;

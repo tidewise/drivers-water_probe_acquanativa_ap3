@@ -7,10 +7,9 @@ using namespace water_probe_acquanativa_ap3;
 Driver::Driver(int address)
     : m_address(address) {}
 
-int16_t Driver::readSingleRegister(unsigned int register_id)
+uint16_t Driver::readSingleRegister(unsigned int register_id)
 {
-    int16_t value = modbus::Master::readSingleRegister(m_address, false, register_id);
-    return value;
+    return modbus::Master::readSingleRegister(m_address, false, register_id);
 }
 
 ProbeMeasurements Driver::getMeasurements()
@@ -31,9 +30,10 @@ ProbeMeasurements Driver::getMeasurements()
     measurements.oxidation_reduction_potential =
         readSingleRegister(R_OXIDATION_REDUCTION_POTENTIAL) * 1e-3;
     measurements.turbidity = readSingleRegister(R_TURBIDITY);
-    measurements.height = readSingleRegister(R_HEIGHT);
-    measurements.latitude = readSingleRegister(R_LATITUDE) / 100.0;
-    measurements.longitude = readSingleRegister(R_LONGITUDE) / 100.0;
+    measurements.height = static_cast<int16_t>(readSingleRegister(R_HEIGHT));
+    measurements.latitude = static_cast<int16_t>(readSingleRegister(R_LATITUDE)) / 100.0;
+    measurements.longitude =
+        static_cast<int16_t>(readSingleRegister(R_LONGITUDE)) / 100.0;
 
     return measurements;
 }

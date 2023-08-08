@@ -30,7 +30,7 @@ namespace water_probe_acquanativa_ap3 {
 
         };
 
-        int16_t readSingleRegister(unsigned int register_id);
+        uint16_t readSingleRegister(unsigned int register_id);
 
     public:
         Driver(int address);

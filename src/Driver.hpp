@@ -13,6 +13,9 @@ namespace water_probe_acquanativa_ap3 {
         // the default address has to be 57
         int m_address;
 
+        uint16_t readSingleRegister(unsigned int register_id);
+
+    public:
         enum Registers {
             R_OXYGEN_CONCENTRATION = 0,
             R_OXYGEN_SATURATION = 1,
@@ -29,9 +32,6 @@ namespace water_probe_acquanativa_ap3 {
             R_LONGITUDE = 12
         };
 
-        uint16_t readSingleRegister(unsigned int register_id);
-
-    public:
         Driver(int address);
 
         ProbeMeasurements getMeasurements();

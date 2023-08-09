@@ -31,8 +31,6 @@ ProbeMeasurements Driver::getMeasurements()
         base::Temperature::fromCelsius(readSingleRegister(R_TEMPERATURE) / 100.0);
     measurements.pH = readSingleRegister(R_PH) / 100.0;
     measurements.salinity = readSingleRegister(R_SALINITY) / 100.0 * 1e-3;
-
-    measurements.dissolved_solids = readSingleRegister(R_DISSOLVED_SOLIDS) / 100.0 * 1e-6;
     measurements.specific_gravity = readSingleRegister(R_SPECIFIC_GRAVITY) / 100.0;
     measurements.oxidation_reduction_potential =
         readSingleRegister(R_OXIDATION_REDUCTION_POTENTIAL) * 1e-3;
@@ -48,6 +46,7 @@ ProbeMeasurements Driver::getMeasurements()
     measurements.conductivity = calculateConductivity(conductivity,
         measurements.temperature,
         measurements.salinity);
+    measurements.dissolved_solids = calculateTDS(measurements.conductivity);
     return measurements;
 }
 
@@ -117,9 +116,9 @@ float Driver::calculateSalinity(float conductivity, base::Temperature const& tem
 }
 
 // Total dissolved solids
-// float Driver::calculateTDS(float conductivity)
-// {
-//     float tds;
-//     tds = 0, 65 * conductivity;
-//     return tds;
-// }
+float Driver::calculateTDS(float conductivity)
+{
+    float tds;
+    tds = 0.65 * (conductivity * 1e+6 / 1e+2);
+    return tds * 1e-6;
+}

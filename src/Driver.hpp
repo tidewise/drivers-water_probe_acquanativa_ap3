@@ -40,8 +40,7 @@ namespace water_probe_acquanativa_ap3 {
         static float calculateConductivity(uint16_t conductivity,
             base::Temperature const& temperature,
             float salinity);
-        float calculateTDS(uint16_t conductivity);
-
+        float calculateTDS(float conductivity);
     };
 
 }

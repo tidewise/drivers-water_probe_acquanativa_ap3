@@ -33,6 +33,9 @@ namespace water_probe_acquanativa_ap3 {
         /** Water dissolved solids concentration (fractional [0, 1])*/
         float dissolved_solids = base::unknown<float>();
 
+        /** Water dissolved solids concentration (fractional [0, 1])*/
+        uint16_t raw_dissolved_solids = 0;
+
         /** Water specific gravity */
         float specific_gravity = base::unknown<float>();
 

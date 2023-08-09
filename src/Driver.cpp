@@ -1,11 +1,7 @@
 #include "Driver.hpp"
 #include <algorithm>
-#include <bit>
-#include <bitset>
-#include <cstring>
 #include <iostream>
 #include <modbus/RTU.hpp>
-#include <vector>
 
 using namespace water_probe_acquanativa_ap3;
 
@@ -30,7 +26,15 @@ ProbeMeasurements Driver::getMeasurements()
     measurements.temperature =
         base::Temperature::fromCelsius(readSingleRegister(R_TEMPERATURE) / 100.0);
     measurements.pH = readSingleRegister(R_PH) / 100.0;
+    
+    auto conductivity = readSingleRegister(R_CONDUCTIVITY);
+    measurements.raw_conductivity = conductivity;
+
     measurements.salinity = readSingleRegister(R_SALINITY) / 100.0 * 1e-3;
+
+    auto dissolved_solids = readSingleRegister(R_DISSOLVED_SOLIDS);
+    measurements.raw_dissolved_solids = dissolved_solids;
+
     measurements.specific_gravity = readSingleRegister(R_SPECIFIC_GRAVITY) / 100.0;
     measurements.oxidation_reduction_potential =
         readSingleRegister(R_OXIDATION_REDUCTION_POTENTIAL) * 1e-3;
@@ -40,19 +44,14 @@ ProbeMeasurements Driver::getMeasurements()
     measurements.longitude =
         static_cast<int16_t>(readSingleRegister(R_LONGITUDE)) / 100.0;
 
-    auto conductivity = readSingleRegister(R_CONDUCTIVITY);
-    measurements.raw_conductivity = conductivity;
+    measurements.conductivity =
+        calculateConductivity(measurements.temperature, measurements.salinity);
 
-    measurements.conductivity = calculateConductivity(conductivity,
-        measurements.temperature,
-        measurements.salinity);
     measurements.dissolved_solids = calculateTDS(measurements.conductivity);
     return measurements;
 }
 
-float Driver::calculateConductivity(uint16_t conductivity,
-    base::Temperature const& temperature,
-    float salinity)
+float Driver::calculateConductivity(base::Temperature const& temperature, float salinity)
 {
     float salinity_ppt = salinity * 1000;
     uint32_t min_conductivity;

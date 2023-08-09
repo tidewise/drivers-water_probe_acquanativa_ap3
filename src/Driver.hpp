@@ -35,25 +35,13 @@ namespace water_probe_acquanativa_ap3 {
         Driver(int address);
 
         ProbeMeasurements getMeasurements();
-        static float calculateSalinity(float conductivity, base::Temperature const& temperature);
+        static float calculateSalinity(float conductivity,
+            base::Temperature const& temperature);
         static float calculateConductivity(uint16_t conductivity,
             base::Temperature const& temperature,
             float salinity);
         float calculateTDS(uint16_t conductivity);
 
-        struct ConductivityWorkaroundResult {
-            enum Attempts {
-                RAW, WITH_BIT15, INVERTED_WITH_BIT15, WITH_BIT16,
-                SIZE
-            };
-
-            float conductivity[SIZE];
-            float salinity[SIZE];
-        };
-
-        static ConductivityWorkaroundResult calculateConductivityWorkaround(
-            uint16_t conductivity,
-            base::Temperature temperature);
     };
 
 }

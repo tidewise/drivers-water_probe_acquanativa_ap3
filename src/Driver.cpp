@@ -1,11 +1,11 @@
 #include "Driver.hpp"
+#include <algorithm>
 #include <bit>
 #include <bitset>
 #include <cstring>
 #include <iostream>
 #include <modbus/RTU.hpp>
 #include <vector>
-#include <algorithm>
 
 using namespace water_probe_acquanativa_ap3;
 
@@ -30,9 +30,6 @@ ProbeMeasurements Driver::getMeasurements()
     measurements.temperature =
         base::Temperature::fromCelsius(readSingleRegister(R_TEMPERATURE) / 100.0);
     measurements.pH = readSingleRegister(R_PH) / 100.0;
-    // measurements.conductivity = readSingleRegister(R_CONDUCTIVITY) / 100.0 * 1e-6 /
-    // 1e-2;
-    auto conductivity = readSingleRegister(R_CONDUCTIVITY);
     measurements.salinity = readSingleRegister(R_SALINITY) / 100.0 * 1e-3;
 
     measurements.dissolved_solids = readSingleRegister(R_DISSOLVED_SOLIDS) / 100.0 * 1e-6;
@@ -45,45 +42,33 @@ ProbeMeasurements Driver::getMeasurements()
     measurements.longitude =
         static_cast<int16_t>(readSingleRegister(R_LONGITUDE)) / 100.0;
 
+    auto conductivity = readSingleRegister(R_CONDUCTIVITY);
     measurements.raw_conductivity = conductivity;
-    measurements.conductivity =
-        calculateConductivity(conductivity, measurements.temperature, measurements.salinity);
+
+    measurements.conductivity = calculateConductivity(conductivity,
+        measurements.temperature,
+        measurements.salinity);
     return measurements;
-}
-
-Driver::ConductivityWorkaroundResult Driver::calculateConductivityWorkaround(
-    uint16_t conductivity,
-    base::Temperature temperature)
-{
-
-    ConductivityWorkaroundResult result;
-    result.conductivity[ConductivityWorkaroundResult::RAW] = conductivity;
-    result.conductivity[ConductivityWorkaroundResult::WITH_BIT15] =
-        conductivity | 1 << 15;
-    result.conductivity[ConductivityWorkaroundResult::INVERTED_WITH_BIT15] =
-        ~conductivity | 1 << 15;
-    result.conductivity[ConductivityWorkaroundResult::WITH_BIT16] =
-        static_cast<uint32_t>(conductivity) | 1 << 16;
-
-    for (int i = 0; i < ConductivityWorkaroundResult::SIZE; ++i) {
-        result.salinity[i] = calculateSalinity(result.conductivity[i], temperature);
-    }
-
-    return result;
 }
 
 float Driver::calculateConductivity(uint16_t conductivity,
     base::Temperature const& temperature,
     float salinity)
 {
-    auto workaround = calculateConductivityWorkaround(conductivity, temperature);
+    float salinity_ppt = salinity * 1000;
+    uint32_t min_conductivity;
+    float min_diff = std::numeric_limits<float>::infinity();
+    for (int32_t i = 0; i <= 1000; i++) {
+        uint32_t conductivity_i = i * 100;
+        float salinity_i = calculateSalinity(i * 100, temperature);
+        float diff = abs(salinity_ppt - salinity_i);
+        if (diff < min_diff) {
+            min_diff = diff;
+            min_conductivity = conductivity_i;
+        }
+    }
 
-    auto min_it = std::min_element(
-        workaround.salinity,
-        workaround.salinity + ConductivityWorkaroundResult::SIZE,
-        [salinity](float a, float b) { return abs(a - salinity) < abs(b - salinity); });
-
-    return workaround.conductivity[min_it - workaround.salinity];
+    return static_cast<float>(min_conductivity) * 1e-6 / 1e-2;
 }
 
 float Driver::calculateSalinity(float conductivity, base::Temperature const& temperature)
@@ -91,7 +76,6 @@ float Driver::calculateSalinity(float conductivity, base::Temperature const& tem
     double ratio;
     double ratio_sqr;
     double ds;
-    float salinity;
 
     double a0 = 0.008;
     double a1 = -0.1692;

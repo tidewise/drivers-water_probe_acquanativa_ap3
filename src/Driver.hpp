@@ -13,29 +13,33 @@ namespace water_probe_acquanativa_ap3 {
         // the default address has to be 57
         int m_address;
 
-        enum Registers {
-            R_OXYGEN_CONCENTRATION          = 0,
-            R_OXYGEN_SATURATION             = 1,
-            R_TEMPERATURE                   = 2,
-            R_PH                            = 3,
-            R_CONDUCTIVITY                  = 4,
-            R_SALINITY                      = 5,
-            R_DISSOLVED_SOLIDS              = 6,
-            R_SPECIFIC_GRAVITY              = 7,
-            R_OXIDATION_REDUCTION_POTENTIAL = 8,
-            R_TURBIDITY                     = 9,
-            R_HEIGHT                        = 10,
-            R_LATITUDE                      = 11,
-            R_LONGITUDE                     = 12
-
-        };
-
-        int16_t readSingleRegister(unsigned int register_id);
+        uint16_t readSingleRegister(unsigned int register_id);
 
     public:
+        enum Registers {
+            R_OXYGEN_CONCENTRATION = 0,
+            R_OXYGEN_SATURATION = 1,
+            R_TEMPERATURE = 2,
+            R_PH = 3,
+            R_CONDUCTIVITY = 4,
+            R_SALINITY = 5,
+            R_DISSOLVED_SOLIDS = 6,
+            R_SPECIFIC_GRAVITY = 7,
+            R_OXIDATION_REDUCTION_POTENTIAL = 8,
+            R_TURBIDITY = 9,
+            R_HEIGHT = 10,
+            R_LATITUDE = 11,
+            R_LONGITUDE = 12
+        };
+
         Driver(int address);
 
         ProbeMeasurements getMeasurements();
+        static float calculateSalinity(float conductivity,
+            base::Temperature const& temperature);
+        static float calculateConductivity(base::Temperature const& temperature,
+            float salinity);
+        float calculateTDS(float conductivity);
     };
 
 }

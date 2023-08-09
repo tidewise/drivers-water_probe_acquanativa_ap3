@@ -8,7 +8,7 @@
 namespace water_probe_acquanativa_ap3 {
     struct ProbeMeasurements {
         base::Time time;
-        
+
         /** Water dissolved oxygen concentration in Kg/m³ */
         float oxygen_concentration = base::unknown<float>();
 
@@ -22,13 +22,19 @@ namespace water_probe_acquanativa_ap3 {
         float pH = base::unknown<float>();
 
         /** Water conductivity in S/m*/
+        uint16_t raw_conductivity = 0;
+
+        /** Water conductivity in S/m*/
         float conductivity = base::unknown<float>();
 
-        /** Water salinity in Practical Salinity Unit (PSU) */
+        /** Water salinity (fractional [0, 1]) */
         float salinity = base::unknown<float>();
 
-        /** Water dissolved solids concentration */
+        /** Water dissolved solids concentration (fractional [0, 1])*/
         float dissolved_solids = base::unknown<float>();
+
+        /** Water dissolved solids concentration (fractional [0, 1])*/
+        uint16_t raw_dissolved_solids = 0;
 
         /** Water specific gravity */
         float specific_gravity = base::unknown<float>();

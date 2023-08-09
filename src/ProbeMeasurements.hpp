@@ -22,6 +22,9 @@ namespace water_probe_acquanativa_ap3 {
         float pH = base::unknown<float>();
 
         /** Water conductivity in S/m*/
+        uint16_t raw_conductivity = 0;
+
+        /** Water conductivity in S/m*/
         float conductivity = base::unknown<float>();
 
         /** Water salinity (fractional [0, 1]) */

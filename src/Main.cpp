@@ -28,6 +28,22 @@ int main(int argc, char** argv)
               << "Latitude: " << measurings.latitude << " °\n"
               << "Longitude: " << measurings.longitude << " °\n";
 
+    auto workaround = driver.calculateConductivityWorkaround(
+        measurings.raw_conductivity, measurings.temperature
+    );
+
+    std::cout << "Conductivity calculations:\n"
+              << "Conductivities:\n"
+              << "raw: " << workaround.conductivity[0] << "\n"
+              << "with_bit15: " << workaround.conductivity[1] << "\n"
+              << "inverted_with_bit15: " << workaround.conductivity[2] << "\n"
+              << "with_bit16: " << workaround.conductivity[3] << "\n"
+              << "Salinities:\n"
+              << "raw: " << workaround.salinity[0] << "\n"
+              << "with_bit15: " << workaround.salinity[1] << "\n"
+              << "inverted_with_bit15: " << workaround.salinity[2] << "\n"
+              << "with_bit16: " << workaround.salinity[3] << "\n";
+
     driver.close();
 
     return 0;

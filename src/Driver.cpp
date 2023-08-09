@@ -5,6 +5,7 @@
 #include <iostream>
 #include <modbus/RTU.hpp>
 #include <vector>
+#include <algorithm>
 
 using namespace water_probe_acquanativa_ap3;
 
@@ -44,59 +45,49 @@ ProbeMeasurements Driver::getMeasurements()
     measurements.longitude =
         static_cast<int16_t>(readSingleRegister(R_LONGITUDE)) / 100.0;
 
+    measurements.raw_conductivity = conductivity;
     measurements.conductivity =
-        conductivityCheck(conductivity, measurements.temperature, measurements.salinity);
+        calculateConductivity(conductivity, measurements.temperature, measurements.salinity);
     return measurements;
 }
 
-float Driver::conductivityCheck(uint16_t conductivity,
-    base::Temperature temperature,
-    float salinity)
+Driver::ConductivityWorkaroundResult Driver::calculateConductivityWorkaround(
+    uint16_t conductivity,
+    base::Temperature temperature)
 {
-    float temp = temperature.getCelsius();
 
-    // caso 0: valor sem mudanca
-    float case_0 = conductivity;
-    std::cout << "case_0: " << case_0;
+    ConductivityWorkaroundResult result;
+    result.conductivity[ConductivityWorkaroundResult::RAW] = conductivity;
+    result.conductivity[ConductivityWorkaroundResult::WITH_BIT15] =
+        conductivity | 1 << 15;
+    result.conductivity[ConductivityWorkaroundResult::INVERTED_WITH_BIT15] =
+        ~conductivity | 1 << 15;
+    result.conductivity[ConductivityWorkaroundResult::WITH_BIT16] =
+        static_cast<uint32_t>(conductivity) | 1 << 16;
 
-    // caso 1: trocar o último bit (bit15)
-    std::bitset<16> bit_case_1{conductivity};
-    bit_case_1 = bit_case_1.flip(15);
-    float case_1 = bit_case_1.to_ulong();
-    std::cout << "case_1: " << case_1;
+    for (int i = 0; i < ConductivityWorkaroundResult::SIZE; ++i) {
+        result.salinity[i] = calculateSalinity(result.conductivity[i], temperature);
+    }
 
-    // caso 2: inverter todos os bits
-    std::bitset<16> bit_case_2{conductivity};
-    bit_case_2.flip();
-    float case_2 = bit_case_2.to_ulong();
-    std::cout << "case_2: " << case_2;
-
-    // caso 3: inverter todos os bits e bit15 para 1 (negativo)
-    std::bitset<16> m_case_3{conductivity};
-    m_case_3.flip();
-    m_case_3.set(15, true);
-    float case_3 = m_case_3.to_ulong();
-    std::cout << "case_3: " << case_3;
-
-    float error0 = abs(calculateSalinity(case_0, temp) - salinity);
-    float error1 = abs(calculateSalinity(case_1, temp) - salinity);
-    float error2 = abs(calculateSalinity(case_2, temp) - salinity);
-    float error3 = abs(calculateSalinity(case_3, temp) - salinity);
-
-    std::map<float, float> aux_map = {
-        {error0, case_0},
-        {error1, case_1},
-        {error2, case_2},
-        {error3, case_3}
-    };
-
-    std::map<float, float>::iterator it = aux_map.begin();
-    return it->second;
+    return result;
 }
 
-float Driver::calculateSalinity(float conductivity, float temperature)
+float Driver::calculateConductivity(uint16_t conductivity,
+    base::Temperature const& temperature,
+    float salinity)
 {
+    auto workaround = calculateConductivityWorkaround(conductivity, temperature);
 
+    auto min_it = std::min_element(
+        workaround.salinity,
+        workaround.salinity + ConductivityWorkaroundResult::SIZE,
+        [salinity](float a, float b) { return abs(a - salinity) < abs(b - salinity); });
+
+    return workaround.conductivity[min_it - workaround.salinity];
+}
+
+float Driver::calculateSalinity(float conductivity, base::Temperature const& temperature)
+{
     double ratio;
     double ratio_sqr;
     double ds;
@@ -121,54 +112,25 @@ float Driver::calculateSalinity(float conductivity, float temperature)
     double c2 = 0.0001104259;
     double c3 = -0.00000069698;
     double c4 = 0.0000000010031;
-    double temp_c = 25;
-
-    if ((temperature > -50 && temperature <= 100)) {
-        ratio = conductivity / 42914;
-        ratio =
-            ratio /
-            (c0 + temperature *
-                      (c1 + temperature * (c2 + temperature * (c3 + temperature * c4))));
-        ratio_sqr = sqrt(ratio);
-        ds = b0 +
-             ratio_sqr *
-                 (b1 + ratio_sqr *
-                           (b2 + ratio_sqr * (b3 + ratio_sqr * (b4 + ratio_sqr * b5))));
-        ds = ds * ((temperature - 15.0) / (1.0 + 0.0162 * (temperature - 15.0)));
-
-        salinity =
-            (float)a0 +
-            ratio_sqr *
-                (a1 + ratio_sqr *
-                          (a2 + ratio_sqr * (a3 + ratio_sqr * (a4 + ratio_sqr * a5)))) +
-            ds;
-    }
-    else {
-
-        ratio = conductivity / 42914;
-        ratio =
-            ratio / (c0 + temp_c * (c1 + temp_c * (c2 + temp_c * (c3 + temp_c * c4))));
-        ratio_sqr = sqrt(ratio);
-        ds = b0 +
-             ratio_sqr *
-                 (b1 + ratio_sqr *
-                           (b2 + ratio_sqr * (b3 + ratio_sqr * (b4 + ratio_sqr * b5))));
-        ds = ds * ((temp_c - 15.0) / (1.0 + 0.0162 * (temp_c - 15.0)));
-
-        salinity =
-            (float)a0 +
-            ratio_sqr *
-                (a1 + ratio_sqr *
-                          (a2 + ratio_sqr * (a3 + ratio_sqr * (a4 + ratio_sqr * a5)))) +
-            ds;
+    float temp_c = temperature.getCelsius();
+    if (temp_c <= -50 || temp_c > 100) {
+        temp_c = 25;
     }
 
-    if (salinity < 0)
-        return 0;
-    else
-        return salinity;
+    ratio = conductivity / 42914;
+    ratio = ratio / (c0 + temp_c * (c1 + temp_c * (c2 + temp_c * (c3 + temp_c * c4))));
+    ratio_sqr = sqrt(ratio);
+    ds = b0 + ratio_sqr *
+                  (b1 + ratio_sqr *
+                            (b2 + ratio_sqr * (b3 + ratio_sqr * (b4 + ratio_sqr * b5))));
+    ds = ds * ((temp_c - 15.0) / (1.0 + 0.0162 * (temp_c - 15.0)));
+
+    return (float)a0 +
+           ratio_sqr *
+               (a1 + ratio_sqr *
+                         (a2 + ratio_sqr * (a3 + ratio_sqr * (a4 + ratio_sqr * a5)))) +
+           ds;
 }
-
 
 // Total dissolved solids
 // float Driver::calculateTDS(float conductivity)

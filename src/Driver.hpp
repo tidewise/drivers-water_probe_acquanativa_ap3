@@ -35,6 +35,10 @@ namespace water_probe_acquanativa_ap3 {
         Driver(int address);
 
         ProbeMeasurements getMeasurements();
+        float calculateSalinity(float conductivity, float temperature);
+        float conductivityCheck(uint16_t conductivity, base::Temperature temperature, float salinity);
+        float calculateConductivity(float salinity);
+        float calculateTDS(uint16_t conductivity);
     };
 
 }
